@@ -1,0 +1,142 @@
+2025-04-08 12:51:58,482 INFO     [Flask] Scraper configuration loaded via scraperrrr module.
+2025-04-08 12:51:58,483 INFO     [Flask] Starting Flask development server on host 0.0.0.0, port 5000.
+2025-04-08 12:52:07,964 INFO     [Flask] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.188:5000
+2025-04-08 12:52:07,965 INFO     [Flask] [33mPress CTRL+C to quit[0m
+2025-04-08 12:52:20,118 INFO     [Flask] Retrieved 0 listings from database.
+2025-04-08 12:52:20,119 ERROR    [Flask] Exception on / [GET]
+Traceback (most recent call last):
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\webapp.py", line 84, in index
+    return render_template('listings.html',
+                           listings=listings,
+                           scan_status=scan_status_display,
+                           trigger_pending=trigger_pending)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: listings.html
+2025-04-08 12:52:20,124 INFO     [Flask] 192.168.0.188 - - [08/Apr/2025 12:52:20] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-04-08 12:52:20,163 INFO     [Flask] 192.168.0.188 - - [08/Apr/2025 12:52:20] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-08 12:52:30,126 INFO     [Flask] Retrieved 0 listings from database.
+2025-04-08 12:52:30,127 ERROR    [Flask] Exception on / [GET]
+Traceback (most recent call last):
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\webapp.py", line 84, in index
+    return render_template('listings.html',
+                           listings=listings,
+                           scan_status=scan_status_display,
+                           trigger_pending=trigger_pending)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: listings.html
+2025-04-08 12:52:30,129 INFO     [Flask] 127.0.0.1 - - [08/Apr/2025 12:52:30] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-04-08 12:52:30,201 INFO     [Flask] 127.0.0.1 - - [08/Apr/2025 12:52:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-08 14:01:15,662 INFO     [Flask] Scraper configuration loaded via scraperrrr module.
+2025-04-08 14:01:15,663 INFO     [Flask] Starting Flask development server on host 0.0.0.0, port 5000.
+2025-04-08 14:01:25,138 INFO     [Flask] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.188:5000
+2025-04-08 14:01:25,139 INFO     [Flask] [33mPress CTRL+C to quit[0m
+2025-04-08 14:02:12,297 INFO     [Flask] Scraper configuration loaded via scraperrrr module.
+2025-04-08 14:02:12,298 INFO     [Flask] Starting Flask development server on host 0.0.0.0, port 5000.
+2025-04-08 14:02:21,813 INFO     [Flask] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.188:5000
+2025-04-08 14:02:21,813 INFO     [Flask] [33mPress CTRL+C to quit[0m
+2025-04-08 14:02:42,127 INFO     [Flask] Retrieved 0 listings from database.
+2025-04-08 14:02:42,128 ERROR    [Flask] Exception on / [GET]
+Traceback (most recent call last):
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\webapp.py", line 84, in index
+    return render_template('listings.html',
+                           listings=listings,
+                           scan_status=scan_status_display,
+                           trigger_pending=trigger_pending)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 149, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\jinja2\loaders.py", line 126, in load
+    source, filename, uptodate = self.get_source(environment, name)
+                                 ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 65, in get_source
+    return self._get_source_fast(environment, template)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alexa\marktplaats_monitor\venv\Lib\site-packages\flask\templating.py", line 99, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: listings.html
+2025-04-08 14:02:42,132 INFO     [Flask] 192.168.0.188 - - [08/Apr/2025 14:02:42] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-04-08 14:13:43,669 INFO     [Flask] Scraper configuration loaded via scraperrrr module.
+2025-04-08 14:13:43,670 WARNING  [Flask] Database file not found at marktplaats_listings.db. Attempting to initialize.
+2025-04-08 14:13:43,670 INFO     [Flask] Starting Flask development server on host 0.0.0.0, port 5000.
+2025-04-08 14:13:53,182 INFO     [Flask] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.188:5000
+2025-04-08 14:13:53,182 INFO     [Flask] [33mPress CTRL+C to quit[0m

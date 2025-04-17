@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Listing Database</title>
+    <!-- Link to CSS or reuse styles from listings.html if you create a base template -->
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; } /* Wider container */
+        .navbar { background-color: #fff; padding: 10px 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar ul { list-style: none; padding: 0; margin: 0; display: flex; }
+        .navbar li { margin-right: 25px; }
+        .navbar a { text-decoration: none; color: #555; font-weight: 500; padding: 5px 0; border-bottom: 2px solid transparent; }
+        .navbar a:hover { color: #007bff; }
+        .navbar a.active { color: #007bff; border-bottom-color: #007bff; }
+        .card { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; vertical-align: top; }
+        th { background-color: #f8f9fa; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+        td.actions a { margin-right: 8px; text-decoration: none; }
+        .hidden-row { opacity: 0.6; font-style: italic; } /* Style for hidden rows */
+        .hidden-row td { background-color: #efefef; }
+        .status-icon { font-size: 1.2em; }
+        .favorite-yes { color: #ffc107; } /* Yellow/Gold for favorite */
+        .hidden-yes { color: #dc3545; } /* Red for hidden */
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+         <ul>
+             {# Use active_page variable passed from Flask to set the active class #}
+             <li><a href="{{ url_for('index') }}" class="{{ 'active' if active_page == 'dashboard' }}">Dashboard</a></li>
+             <li><a href="{{ url_for('database_view') }}" class="{{ 'active' if active_page == 'database' }}">DataBase</a></li>
+             <li><a href="{{ url_for('faq_view') }}" class="{{ 'active' if active_page == 'faq' }}">FAQ</a></li>
+         </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Full Listing Database</h1>
+
+        {% if listings %}
+        <div class="card">
+            <p>Showing {{ listings | length }} listings found in the database (including hidden).</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fav</th>
+                        <th>Hidden</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Location</th>
+                        <th>Condition</th>
+                        <th>Scraped At</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for listing in listings %}
+                    {# Add class if hidden #}
+                    <tr class="{{ 'hidden-row' if listing.hidden == 1 }}">
+                        <td style="text-align: center;">
+                             {# Display star or nothing #}
+                            {% if listing.favorite == 1 %}<span class="status-icon favorite-yes" title="Favorite">★</span>{% endif %}
+                        </td>
+                         <td style="text-align: center;">
+                             {# Display X or nothing #}
+                             {% if listing.hidden == 1 %}<span class="status-icon hidden-yes" title="Hidden">✗</span>{% endif %}
+                         </td>
+                        <td>{{ listing.title | escape }}</td>
+                        <td>{{ listing.price | escape }}</td>
+                        <td>{{ listing.location | escape }}</td>
+                        <td>{{ listing.condition | escape }}</td>
+                        <td>{{ listing.scraped_at | default('N/A') }}</td>
+                        <td>
+                            {% if listing.url and listing.url.startswith('http') %}
+                            <a href="{{ listing.url | escape }}" target="_blank" rel="noopener noreferrer" title="Open Listing">View</a>
+                            {% else %}
+                            N/A
+                            {% endif %}
+                             {# Optionally add image link if available #}
+                             {% if listing.image_url and listing.image_url.startswith('http') %}
+                             | <a href="{{ listing.image_url | escape }}" target="_blank" rel="noopener noreferrer" title="Open Image">Img</a>
+                             {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="card">
+            <p>No listings found in the database.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

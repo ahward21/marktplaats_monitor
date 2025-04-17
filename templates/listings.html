@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="60"> <!-- Keep or adjust refresh -->
+    <title>Marktplaats Scanner Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        /* --- Base, Layout, Stats, Card Styles (Keep As Is from previous version) --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .navbar { background-color: #fff; padding: 10px 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar ul { list-style: none; padding: 0; margin: 0; display: flex; }
+        .navbar li { margin-right: 25px; }
+        .navbar a { text-decoration: none; color: #555; font-weight: 500; padding: 5px 0; border-bottom: 2px solid transparent; /* For active state */ }
+        .navbar a:hover { color: #007bff; }
+        .navbar a.active { color: #007bff; border-bottom-color: #007bff; } /* Style for active tab */
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; }
+        .card { position: relative; background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+        .card h2 { margin-top: 0; margin-bottom: 15px; font-size: 1.25rem; color: #343a40; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .scanner-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; }
+        .stat-item { background-color: #f8f9fa; padding: 10px; border-radius: 5px; border: 1px solid #eee; font-size: 0.9rem; }
+        .stat-item strong { display: block; margin-bottom: 5px; color: #555; font-size: 0.8rem; text-transform: uppercase;}
+        #map { height: 400px; width: 100%; margin-top: 0; border-radius: 8px; border: 1px solid #e0e0e0; z-index: 0;}
+        .listings-section { grid-column: 1 / -1; margin-top: 25px; }
+        .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .listing-card { border:1px solid #e0e0e0; border-radius:6px; overflow:visible; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.06); transition:box-shadow .2s ease-in-out,opacity .4s ease; display:flex; flex-direction:column; position:relative; }
+        .listing-card:hover { box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+        .listing-card .image-container { width:100%; height:180px; background-color:#eee; display:flex; justify-content:center; align-items:center; overflow:hidden; text-align:center; border-radius:6px 6px 0 0; }
+        .listing-card img { width:100%; height:100%; object-fit:cover; display:block; }
+        .listing-card-content { padding:15px; padding-top:15px; flex-grow:1; display:flex; flex-direction:column; position:relative; }
+        .listing-card h3 { margin-top:0; margin-bottom:8px; font-size:1rem; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; min-height:2.6em; flex-grow:1; padding-right:30px; }
+        .listing-price { font-weight:bold; color:#007bff; margin-bottom:10px; font-size:1.1rem; display:block; }
+        .listing-meta { font-size:0.85em; color:#6c757d; margin-bottom:15px; }
+        .listing-link { display:block; text-align:center; padding:8px 10px; background-color:#007bff; color:white; border-radius:4px; text-decoration:none; font-size:.9rem; transition:background-color .2s ease; margin-top:auto; }
+        .listing-link:hover { background-color:#0056b3; }
+        /* --- Utility, Status, Flash Styles (Keep As Is) --- */
+        .button { padding:10px 15px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer; text-decoration:none; display:inline-block; margin-top:15px; font-size:1rem; transition:background-color .2s ease; }
+        .button.trigger { background-color:#007bff; }
+        .button:hover { opacity:.9; }
+        .flash { padding:1rem; margin-bottom:1rem; border-radius:.25rem; border:1px solid transparent; }
+        .flash.info { color:#0c5460; background-color:#d1ecf1; border-color:#bee5eb; }
+        .flash.warning { color:#856404; background-color:#fff3cd; border-color:#ffeeba; }
+        .flash.error { color:#721c24; background-color:#f8d7da; border-color:#f5c6cb; }
+        .status-label { font-weight:bold; color:#495057; }
+        .status-value { margin-left:10px; font-weight:bold; }
+        .status-value.running { color:#dc3545; }
+        .status-value.trigger-pending { color:#ffc107; }
+        .status-value.idle { color:#28a745; }
+        .status-value.offline { color:#6c757d; }
+        .status-value.error, .status-value.status-file-error { color:#dc3545; }
+        .status-value.idle-\/-unknown, .status-value.unknown { color:#ffc107; }
+        .text-muted { color:#6c757d; font-size:.85em; }
+        /* --- Map Marker & Popup Styles (Keep As Is) --- */
+        .marker-icon { background-color:grey; border:1px solid #555; border-radius:50%; box-shadow:1px 1px 3px rgba(0,0,0,0.5); text-align:center; line-height:18px; font-weight:bold; color:white; font-size:10px; pointer-events:auto; }
+        .marker-icon-green { background-color:#28a745; }
+        .marker-icon-yellow { background-color:#ffc107; color:#333; }
+        .marker-icon-red { background-color:#dc3545; }
+        .marker-icon-blue { background-color:#007bff; }
+        .leaflet-popup-content img.popup-image { max-width:150px; max-height:100px; display:block; margin:5px 0; border-radius:3px; }
+        .leaflet-popup-content .img-error-text { font-size:.8em; color:#888; display:block; margin:5px 0; }
+        /* --- Action Buttons Styles (Keep As Is from previous version) --- */
+        .card-actions { position:absolute; top:4px; right:4px; display:flex; gap:4px; z-index:10; opacity:0; transition:opacity .2s ease; }
+        .listing-card:hover .card-actions { opacity:.8; }
+        .card-actions:hover { opacity:1; }
+        .action-button { background-color:rgba(108,117,125,0.5); color:white; border:1px solid rgba(255,255,255,0.4); border-radius:50%; width:22px; height:22px; line-height:20px; padding:0; margin:0; text-align:center; font-weight:bold; font-size:16px; cursor:pointer; transition:background-color .2s ease,color .2s ease,transform .1s ease; box-shadow:0 1px 2px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; }
+        .action-button:hover { transform:scale(1.1); }
+        .hide-button { font-size:18px; line-height:19px; }
+        .hide-button:hover { background-color:rgba(220,53,69,0.9); }
+        .favorite-button { font-size:14px; line-height:20px; }
+        .favorite-button.is-favorite { background-color:rgba(255,193,7,0.8); color:#333; border-color:rgba(255,193,7,0.9); }
+        .favorite-button:not(.is-favorite):hover { background-color:rgba(40,167,69,0.7); }
+        .favorite-button.is-favorite:hover { background-color:rgba(220,53,69,0.8); }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            {# Use active_page variable passed from Flask to set the active class #}
+            <li><a href="{{ url_for('index') }}" class="{{ 'active' if active_page == 'dashboard' }}">Dashboard</a></li>
+            <li><a href="{{ url_for('database_view') }}" class="{{ 'active' if active_page == 'database' }}">DataBase</a></li> {# Renamed & Linked #}
+            <li><a href="{{ url_for('faq_view') }}" class="{{ 'active' if active_page == 'faq' }}">FAQ</a></li> {# Renamed & Linked #}
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message | escape }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Grid: Scanner Info & Map -->
+        <div class="main-grid">
+            <div class="card scanner-info">
+                <h2>Scanner Control & Stats</h2>
+                 <div class="scanner-stats">
+                     <div class="stat-item">
+                        <strong>Status</strong>
+                        <span class="status-value {{ scan_status.lower().replace(' ', '-').replace('/', '-') }}">
+                             {{ scan_status | escape }}
+                             {% if trigger_pending and 'Pending' not in scan_status %}
+                                 <span class="text-muted">(Trigger Pending)</span>
+                             {% endif %}
+                        </span>
+                    </div>
+                     <div class="stat-item"><strong>Last Fetch</strong><span>{{ scan_stats.last_fetch_time | escape }}</span></div>
+                     <div class="stat-item"><strong>Active Queries</strong><span>{{ scan_stats.active_query_count | escape }}</span></div>
+                     <div class="stat-item"><strong>Listings Found (Last)</strong><span>{{ scan_stats.last_found_count | escape }}</span></div>
+                 </div>
+                <a href="{{ url_for('trigger_scan') }}" class="button trigger">Trigger Scan Now</a>
+            </div>
+            <div id="map" class="card">
+                 <p style="text-align: center; margin-top: 50px;" class="text-muted">Loading map...</p>
+            </div>
+        </div>
+
+        <!-- Listings Section -->
+        <div class="listings-section card">
+            <h2>Bike Listings (Favorites First)</h2> {# Updated Heading #}
+             {% if listings %}
+                <div class="listings-grid">
+                    {% for listing in listings %}
+                    <div class="listing-card" data-url="{{ listing.url | escape }}" data-favorite="{{ 'true' if listing.favorite == 1 else 'false' }}">
+                        <div class="card-actions">
+                             <button class="action-button favorite-button {% if listing.favorite == 1 %}is-favorite{% endif %}" title="Toggle Favorite">
+                                 {% if listing.favorite == 1 %}★{% else %}☆{% endif %}
+                            </button>
+                             <button class="action-button hide-button" title="Hide this listing">×</button>
+                        </div>
+                        <div class="image-container">
+                            {% if listing.image_url and listing.image_url != 'N/A' and listing.image_url.startswith('http') %}
+                                <img src="{{ listing.image_url | escape }}" alt="{{ listing.title | escape }} Image" class="listing-image" onerror="this.style.display='none'; this.parentElement.innerHTML += '<span class=\'text-muted\'>Image unavailable</span>';">
+                            {% else %}
+                                <span class="text-muted">No Image</span>
+                            {% endif %}
+                        </div>
+                        <div class="listing-card-content">
+                             <h3>{{ listing.title | escape }}</h3>
+                            <span class="listing-price">
+                                {% set price_cleaned = listing.price | replace('€','') | trim | escape %}
+                                {% if price_cleaned and price_cleaned != 'N/A' %} € {{ price_cleaned }}
+                                {% elif listing.price and ('bied' in listing.price.lower() or 'n.o.t.k' in listing.price.lower()) %} On Request / Bidding
+                                {% else %} Price N/A {% endif %}
+                            </span>
+                             <div class="listing-meta">
+                                 <span class="location">{{ listing.location | escape if listing.location else 'Location N/A' }}</span>
+                                 {# Optionally display scraped date #}
+                                 {# <br><span class="date text-muted">Found: {{ listing.scraped_at.strftime('%Y-%m-%d %H:%M') if listing.scraped_at else 'N/A' }}</span> #}
+                             </div>
+                            <a href="{{ listing.url | escape }}" target="_blank" rel="noopener noreferrer" class="listing-link">View Listing</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                 {# Add the placeholder class here too #}
+                <p class="no-listings-message">No listings currently visible. Run a scan or check if all listings have been hidden or if filters are too restrictive.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Map Data Script Tag -->
+    <script id="listingsJsonData" type="application/json">
+        {{ listings_json | safe if listings_json else '[]' }}
+    </script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Map Initialization Script -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        try {
+            var map = L.map('map').setView([52.3, 5.5], 7); // Center on Netherlands
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            // Define Marker Icons
+            const createMarkerIcon = (c) => L.divIcon({ className: 'marker-icon ' + c, iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [0, -10] });
+            const icons = {
+                green: createMarkerIcon('marker-icon-green'),   // < 6 hours
+                yellow: createMarkerIcon('marker-icon-yellow'), // 6-24 hours
+                red: createMarkerIcon('marker-icon-red'),       // > 24 hours
+                blue: createMarkerIcon('marker-icon-blue'),     // Fallback? (Keep or remove)
+                grey: createMarkerIcon('')                      // Default/Error
+            };
+
+            var listingsData = []; var bounds = [];
+            try {
+                var el = document.getElementById('listingsJsonData');
+                if (el) { listingsData = JSON.parse(el.textContent.trim() || '[]'); }
+                 else { console.error("Map data script tag missing."); }
+            } catch (p) { console.error("JSON parse error map data:", p); listingsData = []; }
+
+            // --- Add Markers with NEW Time Logic ---
+            if (Array.isArray(listingsData)) {
+                const now = new Date();
+                listingsData.forEach(function(l) {
+                    if (typeof l === 'object' && l !== null && l.latitude != null && l.longitude != null) { // Check != null specifically
+                        var lat = parseFloat(l.latitude);
+                        var lon = parseFloat(l.longitude);
+
+                        if (!isNaN(lat) && !isNaN(lon)) {
+                            // --- NEW Marker Color Logic ---
+                            let icon = icons.grey; // Default icon
+                            try {
+                                if (l.scraped_at) {
+                                    const listingDate = new Date(l.scraped_at);
+                                    if (!isNaN(listingDate.getTime())) {
+                                        const ageHours = (now.getTime() - listingDate.getTime()) / 3600000; // Age in hours
+                                        if (ageHours < 6) {             // Less than 6 hours
+                                            icon = icons.green;
+                                        } else if (ageHours < 24) {     // 6 to 24 hours
+                                            icon = icons.yellow;
+                                        } else {                        // More than 24 hours
+                                            icon = icons.red;
+                                        }
+                                    }
+                                }
+                            } catch (dateError) { console.warn("Marker color date error:", dateError); }
+                            // --- END NEW Marker Color Logic ---
+
+                            var marker = L.marker([lat, lon], { icon: icon }).addTo(map);
+                            bounds.push([lat, lon]); // For map fitting
+
+                            // Popup Content (Improved Escaping)
+                            var title = l.title || 'N/A'; var price = l.price || 'N/A'; var url = l.url || '#'; var imageUrl = l.image_url;
+                            var escapeHtml = (unsafe) => { // Corrected escape function
+                                if (!unsafe) return '';
+                                return unsafe.toString()
+                                     .replace(/&/g, "&")
+                                     .replace(/</g, "<")
+                                     .replace(/>/g, ">")
+                                     // Removed problematic quote replacement: .replace(/"/g, """)
+                                     .replace(/'/g, "'");
+                            };
+                            var imgHtml = (imageUrl && imageUrl!='N/A' && imageUrl.startsWith('http')) ? `<img src="${escapeHtml(imageUrl)}" alt="Image" class="popup-image" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><span class="img-error-text" style="display:none;">Image unavailable</span><br>`:'';
+                            marker.bindPopup(`<b>${escapeHtml(title)}</b><br>Price: ${escapeHtml(price)}<br>${imgHtml}<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">View Listing</a>`);
+                        }
+                    }
+                });
+                if (bounds.length > 0) { map.fitBounds(bounds, { padding: [50, 50] }); }
+                 else { console.log("No valid markers for map."); }
+            } else { console.error("Map data not array:", listingsData); }
+        } catch (e) {
+            console.error("Map init error:", e);
+            var mapDiv = document.getElementById('map');
+            if (mapDiv) { mapDiv.innerHTML = '<p style="color:red;text-align:center;margin-top:50px;">Map Error</p>'; }
+        }
+      });
+    </script>
+
+    <!-- Hide/Favorite Action Script (Keep As Is from previous version) -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const listingsGrid = document.querySelector('.listings-grid');
+          if (listingsGrid) {
+              listingsGrid.addEventListener('click', function(event) {
+                  const targetButton = event.target.closest('.action-button');
+                  if (!targetButton) return;
+                  event.preventDefault(); event.stopPropagation();
+                  const card = targetButton.closest('.listing-card');
+                  if (!card) { console.error("No parent card found."); return; }
+                  const url = card.getAttribute('data-url');
+                  if (!url) { console.error("No URL found on card."); alert("Error: URL missing."); return; }
+
+                  // Handle Hide Button
+                  if (targetButton.classList.contains('hide-button')) {
+                      const title = card.querySelector('h3')?.textContent.trim() || 'this item';
+                      if (!confirm(`Hide listing:\n"${title}"?\n\n(It won't show again on refresh)`)) return;
+                      console.log(`Hiding: ${url}`);
+                      fetch('/api/hide_listing', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:url}) })
+                      .then(response => response.json().then(data => ({ok:response.ok, data:data})))
+                      .then(({ok, data}) => {
+                          console.log('Hide Response:', data);
+                          if (ok && data.success) {
+                              card.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; card.style.opacity = '0'; card.style.transform = 'scale(0.95)';
+                              setTimeout(() => {
+                                  if(card.parentNode) card.remove();
+                                  // Check if grid is empty now
+                                  if (!listingsGrid.querySelector('.listing-card')) {
+                                       const placeholder = listingsGrid.parentNode.querySelector('.no-listings-message') || document.createElement('p');
+                                       placeholder.className = 'no-listings-message'; // Add class
+                                       placeholder.textContent = "All listings hidden or none found.";
+                                       if (!listingsGrid.parentNode.querySelector('.no-listings-message')) {
+                                            listingsGrid.parentNode.insertBefore(placeholder, listingsGrid.nextSibling); // Add placeholder p tag
+                                       }
+                                   }
+                              }, 500);
+                          } else { alert(`Failed to hide: ${data.message || 'Unknown error'}`); }
+                      }).catch(error => { console.error('Hide API Error:', error); alert(`Error hiding: ${error.message || 'Network error'}`); });
+                  }
+                  // Handle Favorite Button
+                  else if (targetButton.classList.contains('favorite-button')) {
+                      console.log(`Toggling favorite: ${url}`);
+                      fetch('/api/toggle_favorite', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:url}) })
+                      .then(response => response.json().then(data => ({ok:response.ok, data:data})))
+                      .then(({ok, data}) => {
+                          console.log('Favorite Response:', data);
+                          if (ok && data.success && typeof data.isFavorite === 'boolean') {
+                              targetButton.classList.toggle('is-favorite', data.isFavorite);
+                              targetButton.innerHTML = data.isFavorite ? '★' : '☆';
+                              card.setAttribute('data-favorite', data.isFavorite.toString()); // Store as string
+                              targetButton.title = data.isFavorite ? 'Remove from Favorites' : 'Add to Favorites';
+                              // Optional: Reload page after toggle to see sorting effect immediately
+                              // setTimeout(() => { window.location.reload(); }, 300);
+                          } else { alert(`Failed to toggle favorite: ${data.message || 'Unknown error'}`); }
+                      }).catch(error => { console.error('Favorite API Error:', error); alert(`Error toggling favorite: ${error.message || 'Network error'}`); });
+                  }
+              });
+          } else { console.warn("Listings grid not found."); }
+      });
+    </script>
+
+    </body>
+</html>

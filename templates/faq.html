@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Marktplaats Scanner</title>
+     <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f4f7f6; color: #333; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; } /* Narrower container for text */
+        .navbar { background-color: #fff; padding: 10px 20px; border-bottom: 1px solid #e0e0e0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .navbar ul { list-style: none; padding: 0; margin: 0; display: flex; }
+        .navbar li { margin-right: 25px; }
+        .navbar a { text-decoration: none; color: #555; font-weight: 500; padding: 5px 0; border-bottom: 2px solid transparent; }
+        .navbar a:hover { color: #007bff; }
+        .navbar a.active { color: #007bff; border-bottom-color: #007bff; }
+        .faq-section { background-color: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); margin-top: 20px; }
+        .faq-section h2 { margin-top: 0; color: #343a40; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .faq-item { margin-bottom: 25px; }
+        .faq-item h3 { color: #007bff; margin-bottom: 8px; font-size: 1.1rem; }
+        .faq-item p, .faq-item ul { margin-left: 5px; color: #555; }
+        .faq-item ul { padding-left: 20px; }
+        code { background-color: #e9ecef; padding: 2px 5px; border-radius: 3px; font-family: monospace; }
+        /* Style for <details> element */
+        details {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        summary {
+            padding: 10px 15px;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            list-style: none; /* Remove default marker */
+            position: relative;
+            color: #343a40;
+        }
+         summary::-webkit-details-marker { display: none; } /* Hide marker for Webkit */
+         summary::before { /* Custom marker */
+             content: '▶';
+             position: absolute;
+             left: 10px;
+             top: 50%;
+             transform: translateY(-50%) rotate(0deg);
+             transition: transform 0.2s ease-in-out;
+             font-size: 0.8em;
+             color: #6c757d;
+         }
+         details[open] summary::before {
+             transform: translateY(-50%) rotate(90deg);
+         }
+        .details-content {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0; /* Separator when open */
+        }
+        .details-content p:first-child { margin-top: 0; }
+        .details-content p:last-child { margin-bottom: 0; }
+
+    </style>
+</head>
+<body>
+     <nav class="navbar">
+         <ul>
+             {# Use active_page variable passed from Flask to set the active class #}
+             <li><a href="{{ url_for('index') }}" class="{{ 'active' if active_page == 'dashboard' }}">Dashboard</a></li>
+             <li><a href="{{ url_for('database_view') }}" class="{{ 'active' if active_page == 'database' }}">DataBase</a></li>
+             <li><a href="{{ url_for('faq_view') }}" class="{{ 'active' if active_page == 'faq' }}">FAQ</a></li>
+         </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Frequently Asked Questions (FAQ)</h1>
+
+        <div class="faq-section">
+            <h2>Using the Web Dashboard</h2>
+
+            <details>
+                <summary>What do the map marker colors mean?</summary>
+                <div class="details-content">
+                    <p>The colors indicate how recently the listing was found by the scraper:</p>
+                    <ul>
+                        <li><strong style="color:#28a745;">Green:</strong> Found less than 6 hours ago.</li>
+                        <li><strong style="color:#ffc107;">Yellow:</strong> Found between 6 and 24 hours ago.</li>
+                        <li><strong style="color:#dc3545;">Red:</strong> Found more than 24 hours ago.</li>
+                        <li><strong style="color:grey;">Grey:</strong> Scraped date unknown or invalid.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details>
+                <summary>How do I hide a listing I'm not interested in?</summary>
+                <div class="details-content">
+                    <p>Hover over the listing card you want to hide. A small '×' button will appear in the top-right corner. Click it and confirm. The listing will disappear from the dashboard view and won't be shown again on future refreshes.</p>
+                    <p>Hidden listings are still stored in the database but are filtered out from the main dashboard view. You can see them in the "DataBase" tab.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>How do I mark a listing as a favorite?</summary>
+                <div class="details-content">
+                    <p>Hover over the listing card. A '☆' (empty star) button will appear next to the hide button. Click the star.</p>
+                    <ul>
+                        <li>Clicking '☆' marks it as a favorite, changing the icon to '★' (filled star).</li>
+                        <li>Clicking '★' removes it from favorites, changing back to '☆'.</li>
+                    </ul>
+                     <p>Favorite listings are "pinned" to the top of the dashboard view, appearing before non-favorite listings.</p>
+                </div>
+            </details>
+
+             <details>
+                <summary>What does the "Trigger Scan Now" button do?</summary>
+                <div class="details-content">
+                    <p>This button signals the backend scraper process (if it's running) to start a new scan cycle immediately, instead of waiting for its next scheduled interval.</p>
+                    <p>If a scan is already running or a trigger is already pending, the button might not initiate a new scan immediately.</p>
+                </div>
+            </details>
+
+             <details>
+                 <summary>What do the different "Status" indicators mean?</summary>
+                 <div class="details-content">
+                     <ul>
+                        <li><strong style="color:#28a745;">Idle:</strong> The scraper is waiting for the next scheduled scan interval.</li>
+                        <li><strong style="color:#ffc107;">Trigger Pending:</strong> The "Trigger Scan Now" button was pressed, and the scraper will start soon (if running).</li>
+                        <li><strong style="color:#dc3545;">Running:</strong> The scraper is actively checking Marktplaats based on the defined queries.</li>
+                        <li><strong style="color:#6c757d;">Offline:</strong> The backend scraper GUI/process is not running.</li>
+                        <li><strong style="color:#dc3545;">Error:</strong> An error occurred during the last scan or in the scraper process. Check the logs in the Tkinter GUI or the `scraper.log` file.</li>
+                         <li><strong style="color:#ffc107;">Idle / Unknown / Status File Error:</strong> The status could not be determined reliably, possibly due to file access issues or the scraper being in an unexpected state.</li>
+                     </ul>
+                 </div>
+            </details>
+
+        </div>
+
+         <div class="faq-section">
+            <h2>About the Scraper & Queries</h2>
+
+            <details>
+                <summary>How does the scraper find listings?</summary>
+                <div class="details-content">
+                    <p>The scraper uses the queries defined in the Python Tkinter GUI application (saved in `queries.json`). It periodically visits the Marktplaats URLs specified in the *active* queries.</p>
+                    <p>For each query, it applies filters like price range, keywords (required/excluded), location (postcode/distance), condition, and maximum age.</p>
+                    <p>New listings that match the criteria are saved to the database (`marktplaats_listings.db`) and notifications may be sent (e.g., via Telegram, if configured).</p>
+                </div>
+            </details>
+
+             <details>
+                <summary>How do I create or modify search queries?</summary>
+                <div class="details-content">
+                    <p>You need to use the Python Tkinter GUI application (`scraper.py`) which provides a "Query Management" tab.</p>
+                    <ol>
+                        <li>Run the `scraper.py` script locally (e.g., using `python scraper.py`).</li>
+                        <li>Navigate to the "Query Management" tab.</li>
+                        <li>To edit: Select a query from the list on the left. Its details will load in the editor on the right. Make changes and click "Save Changes".</li>
+                        <li>To add: Click the "Add New" button. Fill in the details in the editor and click "Save New Query".</li>
+                        <li>To delete: Select a query and click "Delete Selected".</li>
+                        <li>To activate/deactivate: Double-click the checkmark ('✓') or cross ('✗') in the "Active" column of the query list.</li>
+                    </ol>
+                    <p>Remember to save your changes!</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>What is the `queries.json` file?</summary>
+                <div class="details-content">
+                    <p>This file stores all the search configurations created using the Tkinter GUI's Query Management tab. It includes the Marktplaats URL, filters (price, keywords, conditions, age), location parameters (postcode, distance), and whether the query is active.</p>
+                    <p>It's generally recommended to manage queries through the GUI rather than editing this file directly, unless you are very familiar with the format.</p>
+                </div>
+            </details>
+
+             <details>
+                <summary>How often does the scraper check for new listings?</summary>
+                <div class="details-content">
+                    <p>The main check interval is configured in the Tkinter GUI ("Run & Logs" tab, "Interval (min)"). This determines how often the scraper starts a full cycle of checking all *active* queries.</p>
+                     <p>There is also a shorter delay (`RequestDelay` in `config.ini`, default 5 seconds) between processing individual queries within a single scan cycle to avoid overwhelming Marktplaats.</p>
+                </div>
+            </details>
+
+        </div>
+
+         <div class="faq-section">
+            <h2>Troubleshooting</h2>
+
+             <details>
+                <summary>No listings are showing up on the dashboard.</summary>
+                <div class="details-content">
+                    <p>Check the following:</p>
+                    <ul>
+                        <li>Is the backend scraper process (`scraper.py`) running? Check the "Status" on the dashboard; it should ideally be "Idle" or "Running". If it's "Offline", start the `scraper.py` script.</li>
+                         <li>Are there any *active* queries defined in the Query Management tab of the `scraper.py` GUI?</li>
+                         <li>Have you run a scan recently? Either wait for the next interval or click "Trigger Scan Now". Check the "Last Fetch" time.</li>
+                         <li>Are your query filters too restrictive (e.g., very low max price, specific keywords, very small distance)? Try broadening your filters in the `scraper.py` GUI.</li>
+                         <li>Have you hidden all the listings? Check the "DataBase" tab to see all found listings, including hidden ones.</li>
+                        <li>Are there any errors shown in the "Status" or in the logs (`scraper.log` file or the Tkinter GUI's Debug Console)?</li>
+                    </ul>
+                </div>
+            </details>
+
+             <details>
+                <summary>The "Status" shows an error.</summary>
+                <div class="details-content">
+                    <p>An error occurred either during the scraping process or within the backend script.</p>
+                    <ul>
+                        <li>Check the Debug Console in the Tkinter GUI (`scraper.py`) for detailed error messages.</li>
+                        <li>Check the `scraper.log` file (usually found in a `logs` subdirectory) for errors and traceback information.</li>
+                        <li>Common errors might relate to database access, network connection issues, changes in Marktplaats website structure, or invalid query configurations.</li>
+                     </ul>
+                </div>
+            </details>
+
+        </div>
+
+    </div> <!-- /container -->
+</body>
+</html>
