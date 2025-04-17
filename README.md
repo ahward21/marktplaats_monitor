@@ -28,11 +28,11 @@ This application allows you to define specific search queries for Marktplaats.nl
 *(Add your screenshots here!)*
 
 **Management GUI (`scraper.py`)**
-![Management GUI Screenshot](docs/images/gui_screenshot.png) <!-- Replace with your GUI screenshot path -->
-
+![pyhonscrapereexample](https://github.com/user-attachments/assets/8b38ad74-b072-44d2-a2b3-29e27211d046)
 **Web Dashboard (`webapp.py`)**
-![Web Dashboard Screenshot](docs/images/web_dashboard_screenshot.png) <!-- Replace with your Web UI screenshot path -->
-![Map View Screenshot](docs/images/map_view_screenshot.png) <!-- Replace with your Map screenshot path -->
+![exampleimg](https://github.com/user-attachments/assets/e6ea4d47-e2c7-47af-b8f0-aea00e1ad79c)
+![EXAMPLEimgMAP](https://github.com/user-attachments/assets/56b88078-abbe-4213-ae2f-484a0f7196e3)
+
 
 ---
 
@@ -200,4 +200,4 @@ Contributions are welcome! Please feel free to open an issue to discuss bugs or 
 
 ## 📜 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details (You should create a LICENSE file, e.g., containing the MIT license text).
+   This project is licensed under the GLPL License 
