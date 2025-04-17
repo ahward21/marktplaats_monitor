@@ -1,7 +1,7 @@
 [
     {
         "id": "query_7545ad18-973b-45b0-ae72-b66769ea289e",
-        "name": "tEST",
+        "name": "Test Query",
         "url": "https://www.marktplaats.nl/l/fietsen-en-brommers/fietsen-racefietsen/#q:racefiets|f:31,32|offeredSince:Vandaag|PriceCentsFrom:0|PriceCentsTo:150000|sortBy:SORT_INDEX|sortOrder:DECREASING|postcode:7523DB",
         "active": false,
         "min_price": 0.0,
@@ -18,39 +18,10 @@
             "electrisch",
             "oma"
         ],
-        "postcode": "7523DB",
+        "postcode": "",
         "distanceMeters": 75000
     },
-    {
-        "id": "query_1294000c-7949-4ca8-be2d-10f52b483da1",
-        "name": "sd",
-        "url": "https://www.marktplaats.nl/l/fietsen-en-brommers/fietsen-racefietsen/p/6#q:racefiets|f:31,32|offeredSince:Vandaag|sortBy:SORT_INDEX|sortOrder:DECREASING|postcode:7523DB",
-        "active": false,
-        "min_price": null,
-        "max_price": null,
-        "include_non_priced": true,
-        "conditions": [
-            "zo goed als nieuw",
-            "gebruikt"
-        ],
-        "max_age_days": 2,
-        "required_keywords": [],
-        "excluded_keywords": []
-    },
-    {
-        "id": "query_4adb6048-a453-4a90-8943-f4bf8e6fad1c",
-        "name": "https://www.marktplaats.nl/q/racefiets/#PriceCentsTo:150000|postcode:7523DB",
-        "url": "https://www.marktplaats.nl/q/racefiets/#PriceCentsTo:150000|postcode:7523DB",
-        "active": true,
-        "postcode": null,
-        "distanceMeters": null,
-        "min_price": null,
-        "max_price": 1500.0,
-        "include_non_priced": true,
-        "conditions": [
-            "zo goed als nieuw",
-            "gebruikt"
-        ],
+
         "max_age_days": 2,
         "required_keywords": [],
         "excluded_keywords": []
