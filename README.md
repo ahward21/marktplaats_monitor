@@ -1,3 +1,6 @@
+<img src="https://github.com/user-attachments/assets/9f790a71-b338-4706-8d8c-01d3611f532d" alt="Banner" width="700" height="400" />
+
+
 # 📊 Marktplaats Scraper & Dashboard
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
