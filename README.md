@@ -31,7 +31,7 @@ Here's a visual overview of the different components and features of the project
 | Feature / Component             | Screenshot                                                                                                                        |
 | :------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------- |
 | **Python GUI - Start/Stop & Logs** | <img src ="https://github.com/user-attachments/assets/6c43fb71-3a82-45bb-961d-ac1fd0e77ae0" alt="Python GUI showing start/stop controls and logs" width="500"/> 
-| **Python GUI Query Management** | <img src="https://github.com/user-attachments/assets/8b38ad74-b072-44d2-a2b3-29e27211d046" alt="Python GUI for managing queries" "/> |
+| **Python GUI Query Management** | <img src="https://github.com/user-attachments/assets/8b38ad74-b072-44d2-a2b3-29e27211d046" alt="Python GUI for managing queries "/> |
 | **Webapp - Interactive Map**    | <img src="https://github.com/user-attachments/assets/46bcd658-2889-4154-bee0-a36d88086bf0" alt="Webapp showing data on an interactive map" /> |
 | **Webapp - Data View**          | <img src="https://github.com/user-attachments/assets/7d4dc098-f32e-4db8-97c0-e146bf5ba3ab" alt="Webapp displaying detailed data view" /> |
 | **Webapp - Database View**      | <img src="https://github.com/user-attachments/assets/d451b711-2934-40e3-bd64-91bb53749230" alt="Webapp showing database table contents" /> |
