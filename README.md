@@ -25,16 +25,18 @@ This application allows you to define specific search queries for Marktplaats.nl
 
 ## 📸 Screenshots
 
-*(Add your screenshots here!)*
 
-**Management GUI (`scraper.py`)**
-![pyhonscrapereexample](https://github.com/user-attachments/assets/8b38ad74-b072-44d2-a2b3-29e27211d046)
-**Web Dashboard (`webapp.py`)**
-![exampleimg](https://github.com/user-attachments/assets/e6ea4d47-e2c7-47af-b8f0-aea00e1ad79c)
-![EXAMPLEimgMAP](https://github.com/user-attachments/assets/56b88078-abbe-4213-ae2f-484a0f7196e3)
+Here's a visual overview of the different components and features of the project:
 
-
----
+| Feature / Component             | Screenshot                                                                                                                        |
+| :------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------- |
+| **Python GUI - Start/Stop & Logs** | <img src ="https://github.com/user-attachments/assets/6c43fb71-3a82-45bb-961d-ac1fd0e77ae0" alt="Python GUI showing start/stop controls and logs" width="500"/> 
+| **Python GUI Query Management** | <img src="https://github.com/user-attachments/assets/8b38ad74-b072-44d2-a2b3-29e27211d046" alt="Python GUI for managing queries" "/> |
+| **Webapp - Interactive Map**    | <img src="https://github.com/user-attachments/assets/46bcd658-2889-4154-bee0-a36d88086bf0" alt="Webapp showing data on an interactive map" /> |
+| **Webapp - Data View**          | <img src="https://github.com/user-attachments/assets/7d4dc098-f32e-4db8-97c0-e146bf5ba3ab" alt="Webapp displaying detailed data view" /> |
+| **Webapp - Database View**      | <img src="https://github.com/user-attachments/assets/d451b711-2934-40e3-bd64-91bb53749230" alt="Webapp showing database table contents" /> |
+| **Webapp - FAQ Page**           | <img src="https://github.com/user-attachments/assets/6b06c730-ba0a-41b3-86e6-2769749d3a2f" alt="Webapp Frequently Asked Questions page" width="400"/> |
+| **Example Telegram Notification** | <img src="https://github.com/user-attachments/assets/f93129bd-9ee8-43ee-8b54-205b5bd9c6ee" alt="Example notification message sent via Telegram" width="400"/> |
 
 ## 🛠️ Technology Stack
 
@@ -76,7 +78,7 @@ The application consists of two main parts that run independently but share data
 
 ---
 
-## 🚀 Setup and Installation
+## 🚀 Setup and Installation ( .exe coming soon)
 
 1.  **Prerequisites:**
     *   Python 3.8 or higher installed.
