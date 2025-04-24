@@ -2,7 +2,7 @@
     {
         "id": "query_7545ad18-973b-45b0-ae72-b66769ea289e",
         "name": "Test Query",
-        "url": "https://www.marktplaats.nl/l/fietsen-en-brommers/fietsen-racefietsen/#q:racefiets|f:31,32|offeredSince:Vandaag|PriceCentsFrom:0|PriceCentsTo:150000|sortBy:SORT_INDEX|sortOrder:DECREASING|postcode:7523DB",
+        "url": "https://www.marktplaats.nl/l/fietsen-en-brommers/fietsen-racefietsen/#q:racefiets|f:31,32|offeredSince:Vandaag|PriceCentsFrom:0|PriceCentsTo:150000|sortBy:SORT_INDEX|sortOrder:DECREASING|postcode:",
         "active": false,
         "min_price": 0.0,
         "max_price": 1500.0,
